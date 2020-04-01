@@ -25,7 +25,7 @@ Il cliente ci chiede che, ogni giorno, un processo automatico legga la fonte dat
 
 - **crei un report** testuale nominandolo "_[id].txt_" (dove "id" è l'id univoco dell'utente analizzato)
 - **scriva** dentro ciascun file di report alcune informazioni definite
-- **aggiorni** la fonte dati (il campo "_saldo_" della tabella "_utenti_") sommando il totale dell'ammontare delle operazioni al campo "_primo_deposito_" della tabella "_utente_"
+- **aggiorni** la fonte dati: il campo "_saldo_" della tabella "_utenti_" dovrà essere uguale alla somma del campo "_ammontare_" della tabella "_operazioni_" più il campo "_primo_deposito_" della tabella "_utente_" (in sostanza lo stato attuale del saldo di ciascun utente, che consideri tutte le operazioni da lui fatte)
 
 ---
 
@@ -34,10 +34,10 @@ Il cliente ci chiede che, ogni giorno, un processo automatico legga la fonte dat
 - il report di ogni utente dovrà avere questa struttura:
   - riga 1: nome del cliente
   - riga 2: vuota
-  - dalla riga 3: data operazione in formato GG/MM/AAAA seguita dall'ammontare allineato a destra, formattato con simbolo € e due decimali dopo la virgola. Le operazioni dovranno essere ordinate per data crescente
+  - dalla riga 3: data operazione in formato GG/MM/AAAA, seguita da _" ** "_ (uno spazio, due asterischi, uno spazio), seguito dall'ammontare allineato a destra, formattato con simbolo € e due decimali dopo la virgola. Le operazioni dovranno essere ordinate per data crescente
 - se un utente non ha effettuato operazioni, creare un file di report con la sola riga 1
 
-### Esempio di Report
+### Esempio di Report inviato dal cliente
 
 ```
 Eren Jaeger
@@ -50,11 +50,13 @@ Eren Jaeger
 
 ---
 
-## Requisiti tecnici
+## Requisiti tecnici dello Script
 
-- deve essere scritto in **python 3.x**
-- deve **produrre un log** a video che permetta di capire a che punto è l'elaborazione, e quali errori eventualmente si sono verificati
-- deve assicurare che il file report non sia generato se il saldo sulla fonte dati non può essere aggiornato. Questo servirà al cliente ad intercettare tempestivamente eventuali anomalie.
+- deve essere scritto in **python 3.6 o superiore**
+- deve **produrre un log** a video che permetta di capire a che punto è l'elaborazione, e quali errori eventualmente si sono verificati.
+- deve assicurare che la scrittura del il file di report e l'aggiornamento del saldo sulla fonte dati siano "**atomiche**" per ogni correntista: il cliente considererà la mancanza del file di report come un'anomalia da poter intercettare tempestivamente. Se il report manca, la fonte dati rimarrà aggiornata all'ultima esecuzione valida del processo (il cliente è conscio di questo) ma se il report è presente, il cliente considera come totalmente affidabile il suo contenuto così come il saldo sulla fonte dati.
+- deve tenere conto che il processo potrebbe dover analizzare decine di migliaia di righe, ma il cliente ha bisogno che **la fonte dati sia impegnata il meno possibile**
+- deve essere accompagnato da un file **"requirements"** se si usano librerie di terze parti
 
 ---
 
